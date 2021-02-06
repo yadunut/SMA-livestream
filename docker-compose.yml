@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  nginx-rtmp:
+    image: tiangolo/nginx-rtmp
+    container_name: SMA-nginx-rtmp
+    restart: always
+    ports:
+      - "1935:1935"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+
+  stunnel:
+    build: ./stunnel
+    container_name: SMA-stunnel
+    restart: always
+    environment:
+      - CLIENT=yes
+      - SERVICE=fb-live
+      - ACCEPT=0.0.0.0:1936
+      - CONNECT=live-api-s.facebook.com:443
